@@ -17,13 +17,13 @@ data Command
   = CreateGame String String
   | MakeMove Position Player
 
-data GameResult = Won Player | Tie deriving (Show)
+data GameResult = Won Player | Tie deriving (Show, Eq)
 
 data Event
   = GameCreated String String
   | MoveMade Position Player
   | GameFinished GameResult
-  deriving (Show)
+  deriving (Show, Eq)
 
 data Direction
   = West
