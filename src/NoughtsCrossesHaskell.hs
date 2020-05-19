@@ -66,7 +66,9 @@ maxInRow board pos player =
 
 handleCommand :: Command -> GameState -> [Event]
 handleCommand (CreateGame a b) _ = [GameCreated a b]
-handleCommand (MakeMove pos player) state =
+handleCommand (MakeMove pos player) state
+  | nextPlayer state /= player = []
+  | otherwise =
   case Map.lookup pos (board state) of
     Just _ -> []
     Nothing ->

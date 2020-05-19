@@ -20,9 +20,20 @@ main = hspec $ do
         [
           (CreateGame "a" "b"),
           (MakeMove (0, 0) X),
+          (MakeMove (0, 2) O),
           (MakeMove (1, 0) X),
+          (MakeMove (0, 3) O),
           (MakeMove (2, 0) X),
+          (MakeMove (0, 4) O),
           (MakeMove (4, 0) X),
+          (MakeMove (0, 5) O),
           (MakeMove (3, 0) X)
         ]
         (GameFinished (Won X) :: Event)
+    it "nextPlayer is enforced" $
+      not $ generatesEvent
+        [
+          (CreateGame "a" "b"),
+          (MakeMove (0, 0) O)
+        ]
+        (MoveMade (0, 0) O :: Event)
