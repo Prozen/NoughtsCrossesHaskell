@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module NoughtsCrossesHaskell where
+
 import qualified Data.Map.Strict as Map
+import Data.Either
 
 type Position = (Int, Int)
 data Player = X | O deriving (Show, Eq)
@@ -50,7 +52,7 @@ addDirection SouthEast (x, y) = (x+1, y-1)
 countPieces :: Board -> Position -> Player -> Direction -> Int
 countPieces board pos player direction =
   case Map.lookup nextPosition board of
-    Just player -> 1 + (countPieces board nextPosition player direction)
+    Just p -> if player == p then 1 + (countPieces board nextPosition player direction) else 0
     _ -> 0
   where nextPosition = (addDirection direction) pos
 
@@ -93,16 +95,3 @@ performCommand :: (GameState, [Event]) -> Command -> (GameState, [Event])
 performCommand (state, events) command =
   (foldl applyEvent state newEvents, events ++ newEvents)
   where newEvents = handleCommand command state
-
-solve :: IO ()
-solve = do
-  print events
-  where (state, events) = foldl performCommand (GameNotStarted, [])
-                              [
-                                (CreateGame "a" "b"),
-                                (MakeMove (0, 0) X),
-                                (MakeMove (1, 0) X),
-                                (MakeMove (2, 0) X),
-                                (MakeMove (4, 0) X),
-                                (MakeMove (3, 0) X)
-                              ]
